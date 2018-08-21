@@ -8,7 +8,7 @@ module.exports = (app) => {
   app.post(   '/api/organisations/create',          OrganisationsController.create);
   app.post(   '/api/organisations/create_multiple', OrganisationsController.createMultiple);
   app.get(    '/api/organisations/read/:id',        OrganisationsController.read);
-  app.get(    '/api/organisations/read_multiple',   OrganisationsController.readMultiple);
+  app.post(   '/api/organisations/read_multiple',   OrganisationsController.readMultiple);
   app.put(    '/api/organisations/update/:id',      OrganisationsController.update);
   app.put(    '/api/organisations/update_multiple', OrganisationsController.updateMultiple);
   app.delete( '/api/organisations/delete/:id',      OrganisationsController.delete);

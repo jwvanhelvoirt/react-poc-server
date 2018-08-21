@@ -24,12 +24,26 @@ module.exports = {
   },
 
   readMultiple(req, res, next) {
-    const collation = { locale: 'en', strength: 2 };
+    const { sort, skip, limit } = req.body;
+console.log(req.body);
+    const collation = { locale: 'en', strength: 2 }; // For case insensitive sorting.
     Organisation.find({}, null, { collation: collation })
-      .sort({ name: 1 })
-      .skip()
-      .limit()
-      .then(organisations => res.send(organisations))
+      .sort({ [sort]: 1 })
+      .skip(skip)
+      .limit(limit)
+      .then(organisations => {
+        const count = 0;
+        if (organisations.length > 0 ) {
+          // Get the total number of records.
+          Organisation.countDocuments({})
+            .then(count => {
+              res.send({ count: count, listItems: organisations });
+            })
+            .catch(next);
+        } else {
+          res.send({ count: 0, listItems: organisations });
+        }
+      })
       .catch(next);
   },
 
