@@ -19,13 +19,20 @@ module.exports = {
     const organisationId = req.params.id;
 
     Organisation.findById(organisationId)
-      .then(org => res.send(org))
+      .then(org => {
+        console.log(org);
+        if (org === null) {
+          res.status(404).send({errorMessage: 'DIT WERKT NIET!'});
+        } else {
+          res.send(org);
+        }
+      })
       .catch(next);
   },
 
   readMultiple(req, res, next) {
     const { sort, sortOrder, skip, limit } = req.body;
-console.log(req.body);
+// console.log(req.body);
     const collation = { locale: 'en', strength: 2 }; // For case insensitive sorting.
     Organisation.find({}, null, { collation: collation })
       .sort({ [sort]: sortOrder })
@@ -53,9 +60,7 @@ console.log(req.body);
 
     Organisation.findByIdAndUpdate({ _id: organisationId }, organisationProps)
       .then(() => Organisation.findById( {_id:  organisationId }))
-      .then(org => {
-        res.send(org);
-      })
+      .then(org => res.send(org))
       .catch(next);
   },
 
@@ -72,7 +77,12 @@ console.log(req.body);
   },
 
   deleteMultiple(req, res, next) {
-
-  },
+    Organisation.deleteMany({ _id: { $in: req.body.selectedListItems } })
+      .then(organisations => {
+        console.log(organisations);
+        res.send(organisations);
+      })
+      .catch(next);
+  }
 
 };

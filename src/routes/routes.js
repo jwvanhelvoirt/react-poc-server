@@ -12,7 +12,7 @@ module.exports = (app) => {
   app.put(    '/api/organisations/update/:id',      OrganisationsController.update);
   app.put(    '/api/organisations/update_multiple', OrganisationsController.updateMultiple);
   app.delete( '/api/organisations/delete/:id',      OrganisationsController.delete);
-  app.delete( '/api/organisations/delete_multiple', OrganisationsController.deleteMultiple);
+  app.post(   '/api/organisations/delete_multiple', OrganisationsController.deleteMultiple);
 
   // Routes for persons.
   // app.post(   '/api/persons/create',     PersonsController.create);
