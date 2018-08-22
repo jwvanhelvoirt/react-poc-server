@@ -24,11 +24,11 @@ module.exports = {
   },
 
   readMultiple(req, res, next) {
-    const { sort, skip, limit } = req.body;
+    const { sort, sortOrder, skip, limit } = req.body;
 console.log(req.body);
     const collation = { locale: 'en', strength: 2 }; // For case insensitive sorting.
     Organisation.find({}, null, { collation: collation })
-      .sort({ [sort]: 1 })
+      .sort({ [sort]: sortOrder })
       .skip(skip)
       .limit(limit)
       .then(organisations => {
