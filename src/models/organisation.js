@@ -35,7 +35,24 @@ const OrganisationSchema = new Schema({
   image: { type: String }
 });
 
+OrganisationSchema.options.autoIndex = true;
+
+OrganisationSchema.index(
+  {
+    name: 'text',
+    email: 'text',
+    streetAddress: 'text',
+    city: 'text'
+  },
+  { default_language: "dutch" },
+  { name: "TextIndexOrganisations" }
+);
+
 const Organisation = mongoose.model('organisation', OrganisationSchema);
+
+// Organisation.on('index', function(error) {
+//   console.log("Error during text index creation.");
+// });
 
 module.exports = Organisation;
 

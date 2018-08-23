@@ -77,10 +77,10 @@ console.log(req.body);
   },
 
   readMultiple(req, res, next) {
-    const { sort, sortOrder, skip, limit } = req.body;
-// console.log(req.body);
+    const { sort, sortOrder, skip, limit, search } = req.body;
+    const searchParams = search ? { $text: { $search: search } } : {};
     const collation = { locale: 'en', strength: 2 }; // For case insensitive sorting.
-    Organisation.find({}, null, { collation: collation })
+    Organisation.find(searchParams, null, { collation: collation })
       .sort({ [sort]: sortOrder })
       .skip(skip)
       .limit(limit)
@@ -88,7 +88,7 @@ console.log(req.body);
         const count = 0;
         if (organisations.length > 0 ) {
           // Get the total number of records.
-          Organisation.countDocuments({})
+          Organisation.countDocuments(searchParams)
             .then(count => {
               res.send({ count: count, listItems: organisations });
             })
