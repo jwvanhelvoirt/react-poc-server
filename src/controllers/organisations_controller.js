@@ -1,13 +1,59 @@
+const faker = require('faker');
+const _ = require('lodash');
+faker.locale = "nl";
+
 const Organisation = require('../models/organisation');
 const mongoose = require('mongoose');
 
+const { organisation } = mongoose.connection.collections;
+
+const MINIMUM_RECORDS = 500;
+const RECORDS_TO_ADD = 15000;
+
 module.exports = {
+
+/**************** Fake data *****************/
+  createFakeData(req, res, next) {
+    Organisation.countDocuments({})
+      .then(count => {
+        if (count < MINIMUM_RECORDS) {
+          const records = _.times(RECORDS_TO_ADD, () => createFakeRecords());
+          Organisation.insertMany(records);
+          res.send({ createFakeData: 'ok' });
+        }
+      })
+      .catch(next);
+
+      function createFakeRecords() {
+        return {
+          name: faker.name.findName(),
+          email: faker.internet.email(),
+          phone: faker.phone.phoneNumber(),
+          zip: faker.address.zipCode(),
+          streetAddress: faker.address.streetAddress(),
+          city: faker.address.city(),
+          country: faker.address.country(),
+          note: faker.lorem.sentences(),
+          image: faker.image.people()
+        };
+      }
+  },
+/********************************************/
+
+  deleteAll(req, res, next) {
+    Organisation.remove({})
+      .then(() => res.send({ deleteAll: 'ok' }))
+      .catch(next);
+    // organisation.drop()
+    //   .then(() => res.send({ deleteAll: 'ok' }))
+    //   .catch(next);
+  },
 
   create(req, res, next) {
     const organisationProps = req.body;
-
+console.log(req.body);
     Organisation.create(organisationProps)
-      .then(organisation => res.send(organisation))
+      .then(org => res.send(org))
       .catch(next);
   },
 
