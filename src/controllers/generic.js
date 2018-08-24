@@ -38,9 +38,7 @@ module.exports = {
         if (docs.length > 0 ) {
           // Get the total number of records.
           model.countDocuments(searchParams)
-            .then(count => {
-              res.send({ count: count, listItems: docs });
-            })
+            .then(count => res.send({ count: count, listItems: docs }))
             .catch(next);
         } else {
           res.send({ count: 0, listItems: docs });
@@ -67,9 +65,7 @@ module.exports = {
 
   deleteMultiple: (req, res, next, model) => {
     model.deleteMany({ _id: { $in: req.body.selectedListItems } })
-      .then(docs => {
-        res.send(docs);
-      })
+      .then(docs => res.send(docs))
       .catch(next);
   },
 
