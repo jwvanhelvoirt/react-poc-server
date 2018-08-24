@@ -1,19 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-/*
-*name
-*email
-*phone
-*website
-*zip
-*streetAddress
-*city
-*country
-*organisationManager
-*note
-image*/
-
 const OrganisationSchema = new Schema({
   name: { type: String, required: [true, 'Naam is verplicht.'] },
   email: { type: String },
@@ -36,7 +23,6 @@ const OrganisationSchema = new Schema({
 });
 
 OrganisationSchema.options.autoIndex = true;
-
 OrganisationSchema.index(
   {
     name: 'text',
@@ -49,10 +35,6 @@ OrganisationSchema.index(
 );
 
 const Organisation = mongoose.model('organisation', OrganisationSchema);
-
-// Organisation.on('index', function(error) {
-//   console.log("Error during text index creation.");
-// });
 
 module.exports = Organisation;
 

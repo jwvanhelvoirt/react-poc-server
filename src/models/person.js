@@ -21,6 +21,18 @@ const PersonSchema = new Schema({
   image: { type: String }
 });
 
+PersonSchema.options.autoIndex = true;
+PersonSchema.index(
+  {
+    name: 'text',
+    email: 'text',
+    streetAddress: 'text',
+    city: 'text'
+  },
+  { default_language: "dutch" },
+  { name: "TextIndexOrganisations" }
+);
+
 const Person = mongoose.model('person', PersonSchema);
 
 module.exports = Person;
