@@ -18,11 +18,40 @@ module.exports = {
   },
 
   read(req, res, next) {
-    func.read(req, res, next, model);
+    // func.read(req, res, next, model);
+    model.findById(req.params.id).populate('organisations')
+      .then(doc => {
+        if (doc === null) {
+          res.status(404).send({errorMessage: 'DIT WERKT NIET!'});
+        } else {
+          res.send(doc);
+        }
+      })
+      .catch(next);
   },
 
   readMultiple(req, res, next) {
-    func.readMultiple(req, res, next, model);
+    // func.readMultiple(req, res, next, model);
+    const { sort, sortOrder, skip, limit, search } = req.body;
+    const searchParams = search ? { $text: { $search: search } } : {};
+    const collation = { locale: 'en', strength: 2 }; // For case insensitive sorting.
+    model.find(searchParams, null, { collation: collation })
+      .populate('organisations')
+      .sort({ [sort]: sortOrder })
+      .skip(skip)
+      .limit(limit)
+      .then(docs => {
+        const count = 0;
+        if (docs.length > 0 ) {
+          // Get the total number of records.
+          model.countDocuments(searchParams)
+            .then(count => res.send({ count: count, listItems: docs }))
+            .catch(next);
+        } else {
+          res.send({ count: 0, listItems: docs });
+        }
+      })
+      .catch(next);
   },
 
   update(req, res, next) {
@@ -42,8 +71,8 @@ module.exports = {
   },
 
   createFakeData(req, res, next) {
-    const fakeData = {
-      name: faker.name.findName(),
+    const fakeDataP = {
+      name: faker.name.firstName(),
       email: faker.internet.email(),
       phone: faker.phone.phoneNumber(),
       zip: faker.address.zipCode(),
@@ -53,7 +82,7 @@ module.exports = {
       note: faker.lorem.sentences(),
       image: faker.image.people()
     };
-    func.createFakeData(req, res, next, model, 1000, 30000, fakeData);
+    func.createFakeData(req, res, next, model, 1000, 30000, fakeDataP);
   }
 
 };

@@ -11,12 +11,16 @@ describe('Organisations controller', () => {
       request(app)
         .post('/api/organisations/create')
         .send( {
-          name: 'Philips',
-          street: 'Teststreet 1',
+          name: 'Siemens',
+          email: 'info@siemens.com',
+          phone: '030-3839302',
+          website: 'http://www.siemens.nl',
           zip: '4546 KL',
+          streetAddress: 'Lageweide 1',
+          city: 'Utrecht',
           country: 'Nederland',
-          email: 'philips@philips.com',
-          deliveryMethod: 'fastest'
+          organisationManager: 'jos',
+          note: 'Siemens is een high tech bedrijf...'
         })
         .end(() => {
           Organisation.countDocuments().then(newCount => {
@@ -28,19 +32,31 @@ describe('Organisations controller', () => {
   });
 
   it('GET to /api/organisations/read/id returns an existing organisation', done => {
-      const organisation = new Organisation({ name: 'eXultance', street: 'Heiligenbos 57', zip: '5351 SW'});
+      const organisation = new Organisation({
+        name: 'eXultance',
+        zip: '5351 SW',
+        streetAddress: 'Heiligenbos 57',
+        city: 'Berghem',
+        country: 'Nederland'
+      });
       organisation.save().then(() => {
         request(app)
           .get(`/api/organisations/read/${organisation._id}`)
           .end((err, res) => {
-            assert(res.body.street === 'Heiligenbos 57');
+            assert(res.body.streetAddress === 'Heiligenbos 57');
             done();
           });
       });
   });
 
   it('PUT to /api/organisations/update/id edits an existing organisation', done => {
-    const organisation = new Organisation({ name: 'eXultance', street: 'Heiligenbos 55', zip: '5351 SW' });
+    const organisation = new Organisation({
+      name: 'eXultance',
+      zip: '5351 SW',
+      streetAddress: 'Heiligenbos 55',
+      city: 'Berghem',
+      country: 'Nederland'
+    });
     organisation.save().then(() => {
       request(app)
         .put(`/api/organisations/update/${organisation._id}`)
@@ -56,7 +72,13 @@ describe('Organisations controller', () => {
   });
 
   it('DELETE to /api/organisations/delete/id can delete an organisation', done => {
-    const organisation = new Organisation({ name: 'eXultance', street: 'Heiligenbos 56', zip: '5351 SW' });
+    const organisation = new Organisation({
+      name: 'eXultance',
+      zip: '5351 SW',
+      streetAddress: 'Heiligenbos 56',
+      city: 'Berghem',
+      country: 'Nederland'
+     });
     organisation.save().then(() => {
       request(app)
         .delete(`/api/organisations/delete/${organisation._id}`)

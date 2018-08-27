@@ -12,7 +12,7 @@ beforeEach(done => {
   const { organisations } = mongoose.connection.collections;
 
   // Drop the organisations collection before the execution of every testscript.
-  organisations.drop()
+  organisations.remove({})
     .then(() => done())
     .catch(() => done());
 });

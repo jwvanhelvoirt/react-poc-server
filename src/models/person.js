@@ -18,7 +18,11 @@ const PersonSchema = new Schema({
   country: { type: String, required: [true, 'Land is verplicht.'] },
   organisationManager: { type: String },
   note: { type: String },
-  image: { type: String }
+  image: { type: String },
+  organisations: [{
+    type: Schema.Types.ObjectId,
+    ref: 'organisation'
+  }]
 });
 
 PersonSchema.options.autoIndex = true;
