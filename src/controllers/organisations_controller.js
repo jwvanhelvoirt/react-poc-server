@@ -42,7 +42,7 @@ module.exports = {
   },
 
   createFakeData(req, res, next) {
-    const fakeData = {
+    const fakeDataO = {
       name: faker.company.companyName(),
       email: faker.internet.email(),
       phone: faker.phone.phoneNumber(),
@@ -54,7 +54,7 @@ module.exports = {
       note: faker.lorem.sentences(),
       image: faker.image.business()
     };
-    func.createFakeData(req, res, next, model, 500, 15000, fakeData);
+    func.createFakeData(req, res, next, model, 500, 15000, fakeDataO);
   }
 
 };
