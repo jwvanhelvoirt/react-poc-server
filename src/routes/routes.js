@@ -1,5 +1,7 @@
 const OrganisationsController = require('../controllers/organisations_controller');
 const PersonsController = require('../controllers/persons_controller');
+const UserSettingsController = require('../controllers/user_settings_controller');
+const TranslatesController = require('../controllers/translates_controller');
 
 // Watch for incoming requests to the route http://localhost:3050/api
 module.exports = (app) => {
@@ -27,5 +29,13 @@ module.exports = (app) => {
   app.delete( '/api/persons/delete/:id',        PersonsController.delete);
   app.post(   '/api/persons/delete_multiple',   PersonsController.deleteMultiple);
   app.delete( '/api/persons/delete_all',        PersonsController.deleteAll);
+
+  // Routes for translates.
+  app.get(    '/api/translates/read/:lang',          TranslatesController.read);
+
+  // Routes for personal settings.
+  app.get(    '/api/usersettings/read',              UserSettingsController.read);
+  app.put(    '/api/usersettings/update/:id',        UserSettingsController.update);
+
 
 }
