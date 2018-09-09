@@ -37,5 +37,8 @@ module.exports = (app) => {
   app.get(    '/api/usersettings/read',              UserSettingsController.read);
   app.put(    '/api/usersettings/update/:id',        UserSettingsController.update);
 
+  // Routes for login.
+  app.post(    '/api/login/create',      UserSettingsController.createLogin);
+  app.post(    '/api/login/checkmagic',  UserSettingsController.checkMagic);
 
 }

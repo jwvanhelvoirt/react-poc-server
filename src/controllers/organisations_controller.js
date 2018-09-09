@@ -18,7 +18,16 @@ module.exports = {
   },
 
   read(req, res, next) {
-    func.read(req, res, next, model);
+    // func.read(req, res, next, model);
+    model.findById(req.params.id).populate('persons')
+      .then(doc => {
+        if (doc === null) {
+          res.status(404).send({errorMessage: 'DIT WERKT NIET!'});
+        } else {
+          res.send(doc);
+        }
+      })
+      .catch(next);
   },
 
   readMultiple(req, res, next) {

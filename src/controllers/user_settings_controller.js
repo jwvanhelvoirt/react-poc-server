@@ -20,6 +20,41 @@ module.exports = {
 
   update(req, res, next) {
     func.update(req, res, next, model);
+  },
+
+  createLogin(req, res, next) {
+    const { username, password, rememberPrevLogin } = req.body;
+    model.find({})
+      .then(doc => {
+        if (doc.length === 0) {
+          res.send({ authorized: false });
+        } else {
+          if (doc[0].username === username && doc[0].password === password) {
+            // Return magic, rememberPrevLogin and username to update localStorage.
+            res.send({ authorized: true, magic: doc[0].magic, rememberPrevLogin, username });
+          } else {
+            res.send({ authorized: false });
+          }
+        }
+      })
+      .catch(next);
+  },
+
+  checkMagic(req, res, next) {
+    const { magic } = req.body;
+    model.find({})
+      .then(doc => {
+        if (doc.length === 0) {
+          res.send({ magic: false });
+        } else {
+          if (doc[0].magic === magic) {
+            res.send({ magic: true });
+          } else {
+            res.send({ magic: false });
+          }
+        }
+      })
+      .catch(next);
   }
 
 };
