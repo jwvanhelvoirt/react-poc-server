@@ -32,8 +32,17 @@ module.exports = {
 
   readMultiple(req, res, next) {
     // func.readMultiple(req, res, next, model);
-    const { sort, sortOrder, skip, limit, search } = req.body;
-    const searchParams = search ? { $text: { $search: search } } : {};
+    const { sort, sortOrder, skip, limit, search, searchIn } = req.body;
+
+    // Append text search to searchParams.
+    let searchParams = search ? { $text: { $search: search } } : {};
+
+    // Extend searchParams with search values in arrays.
+    searchIn.forEach((item) => {
+      // for example            organisations: { $in: ['5b7fb7c6495a102ff856dc38'] }
+      searchParams[item.property] = { $in: item.value };
+    });
+
     const collation = { locale: 'en', strength: 2 }; // For case insensitive sorting.
     model.find(searchParams, null, { collation: collation })
       .populate('organisations')
